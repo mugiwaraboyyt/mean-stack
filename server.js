@@ -15,6 +15,10 @@ app.use('/article', articleRouter);
 app.use('/user', userRouter);
 app.use('/product', productRouter);
 
+
+app.use('/getfile' , express.static('./upload'));
+
+
 app.listen(port, () =>{
     console.log(`Server started on ${port}`);
 });
