@@ -1,11 +1,40 @@
 const express= require('express');
 const Product = require('../models/product');
-router.post('/ajout', (req,res)=>{
+const multer = require('multer');
+
+
+filename = '';
+
+
+
+const storage1 = multer.diskStorage(
+    {
+      destination: './upload',
+      filename: function (req, file, cb) {
+        date = Date.now();
+        let fl = date + '.' + file.mimetype.split('/')[1];
+        cb(null, fl );
+        
+        filename = fl;
+      },
+    }
+  );
+
+  const upload = multer({ storage: storage1 });
+
+
+
+
+// Product
+router.post('/ajout', upload.single('image') ,(req,res)=>{
 
     let productFromPostman = req.body;
     let product = new Product(productFromPostman);
+
+    product.image= filename;
     product.save().then(
         (saved)=>{
+            filename = '';
             console.log('saved product');
             res.send(saved);
 
